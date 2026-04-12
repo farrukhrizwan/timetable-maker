@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AFU Master Timetable Pro</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+	<meta name="description" content="Generate school and college Class wise and Teacher wise Master timetables in seconds.">
+
+		<!-- PWA Manifest -->
+	<link rel="manifest" href="/manifest.json">
+	<meta name="theme-color" content="#4a90d9">
+
+	<!-- iOS / Safari Support -->
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+	<meta name="apple-mobile-web-app-title" content="AFU Timetable">
+	<link rel="apple-touch-icon" href="/icons/icon-192x192.png">
+
+		<!-- PWA Registration Script -->
+	<script src="/pwa-register.js" defer></script>
+    <!-- Authoritative SheetJS CDN for Excel -->
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+    <style>
+        :root { --primary: #2563eb; --border: #e2e8f0; --bg: #ffffff; --radius: 8px; }
+        body { font-family: system-ui, sans-serif; background: #f1f5f9; padding: 20px; color: #0f172a; }
+        .card { background: var(--bg); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); border: 1px solid var(--border); }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; }
+        .form-group { display: flex; flex-direction: column; gap: 5px; }
+        input, select { padding: 8px; border: 1px solid var(--border); border-radius: 4px; }
+        table { width: 100%; border-collapse: collapse; background: white; margin-top: 10px; font-size: 0.85rem; }
+        th, td { border: 1px solid var(--border); padding: 8px; text-align: center; }
+        th { background: #f8fafc; }
+        .cell-break { background-color: #fef08a !important; font-weight: bold; letter-spacing: 5px; color: #854d0e; }
+        .btn { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-weight: 600; margin-right: 5px; }
+        .btn-green { background: #10b981; }
+        .logo-preview { max-height: 80px; margin-bottom: 10px; }
+        #outputWrapper { display: none; }
+        @media print { .no-print { display: none; } body { background: white; padding: 0; } }
+    </style>
+	<script src="/pwa-register.js" defer></script>
+</head>
+<body>
+
+<div class="no-print">
+    <div class="card">
+        <h2 style="color: var(--primary); margin-top:0">AFU Master Timetable Pro</h2>
+        <div class="form-grid">
+            <div class="form-group"><label>School Name</label><input type="text" id="schoolName" value="AFU Public School"></div>
+            <div class="form-group"><label>School Logo</label><input type="file" id="logoUpload" accept="image/*"></div>
+            <div class="form-group"><label>Start Time</label><input type="time" id="startTime" value="08:00"></div>
+            <div class="form-group"><label>Total Periods</label><input type="number" id="totalPeriods" value="8"></div>
+            <div class="form-group"><label>Break After Period</label><input type="number" id="breakAfter" value="4"></div>
+            <div class="form-group"><label>Break Duration (min)</label><input type="number" id="breakDur" value="30"></div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3>1. Classes & In-charges</h3>
+        <table id="classTable">
+            <thead><tr><th>Class / Section</th><th>In-charge Teacher Name</th><th>Action</th></tr></thead>
+            <tbody id="classBody"></tbody>
+        </table>
+        <button class="btn btn-green" onclick="addRow('classBody', ['10-A', 'Mr. Ahmed'])">+ Add Class</button>
+    </div>
+
+    <div class="card">
+        <h3>2. Subjects & Faculty</h3>
+        <table id="subjectTable">
+            <thead><tr><th>Subject</th><th>Teachers (comma separated)</th><th>Action</th></tr></thead>
+            <tbody id="subjectBody"></tbody>
+        </table>
+        <button class="btn btn-green" onclick="addRow('subjectBody', ['Math', 'Mr. Ahmed, Ms. Sara'])">+ Add Subject</button>
+        <div style="margin-top:20px; border-top: 1px solid #eee; padding-top:20px">
+            <button class="btn" onclick="generate('class')">Generate Class-wise</button>
+            <button class="btn" onclick="generate('teacher')">Generate Teacher-wise</button>
+        </div>
+    </div>
+</div>
+
+<div id="outputWrapper" class="card">
+    <div style="text-align:center">
+        <img id="displayLogo" class="logo-preview" style="display:none">
+        <h2 id="outSchoolName" style="margin:0"></h2>
+        <h4 id="outType" style="color:var(--primary); margin:5px 0 15px 0"></h4>
+    </div>
+    <div style="overflow-x: auto;">
+        <table id="mainTimetable"></table>
+    </div>
+    <div class="no-print" style="margin-top:20px; text-align:right">
+        <button class="btn btn-green" onclick="exportToExcel()">Export Excel</button>
+        <button class="btn btn-green" onclick="exportToWord()">Export Word</button>
+        <button class="btn" onclick="window.print()">Print PDF</button>
+    </div>
+</div>
+<footer style="margin-top: 50px; padding: 20px; text-align: center; font-size: 0.9rem;">
+        &copy; 2026 <a href="https://farrukhrizwan.qzz.io/" target="_blank"  rel="noopener noreferrer">Farrukh Barlas</a> | <a href="https://www.afuwebs.dpdns.org/home" target="_blank"  rel="noopener noreferrer">AFUWEBS</a> |
+    
+    <!-- Placeholder links for later -->
+    <a href="about" style="margin: 0 10px;">About</a> |
+    <a href="privacy" style="margin: 0 10px;">Privacy</a> |
+    <a href="terms" style="margin: 0 10px;">Terms</a>
+	<div> <button id="pwa-install-btn" style="display:none;">  Install App	</button> </div>
+	</footer>
+
+<script>
+    function addRow(id, pl) {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td><input type="text" class="c1" placeholder="${pl[0]}" style="width:90%"></td>
+            <td><input type="text" class="c2" placeholder="${pl[1]}" style="width:90%"></td>
+            <td><button class="btn" style="background:#ef4444; padding:5px 10px" onclick="this.closest('tr').remove()">✖</button></td>`;
+        document.getElementById(id).appendChild(tr);
+    }
+
+    window.onload = () => { for(let i=0; i<3; i++) { addRow('classBody',['','']); addRow('subjectBody',['','']); } };
+
+    document.getElementById('logoUpload').onchange = function(e) {
+        const reader = new FileReader();
+        reader.onload = (evt) => {
+            const logo = document.getElementById('displayLogo');
+            logo.src = evt.target.result;
+            logo.style.display = 'inline-block';
+        };
+        reader.readAsDataURL(e.target.files[0]);
+    };
+
+    function generate(mode) {
+        const data = {
+            name: document.getElementById('schoolName').value,
+            periods: parseInt(document.getElementById('totalPeriods').value),
+            start: document.getElementById('startTime').value,
+            breakAfter: parseInt(document.getElementById('breakAfter').value),
+            breakDur: parseInt(document.getElementById('breakDur').value),
+            classes: Array.from(document.querySelectorAll('#classBody tr')).map(r => ({n: r.querySelector('.c1').value, i: r.querySelector('.c2').value})).filter(x=>x.n),
+            subs: Array.from(document.querySelectorAll('#subjectBody tr')).map(r => ({s: r.querySelector('.c1').value, t: r.querySelector('.c2').value.split(',').map(v=>v.trim())})).filter(x=>x.s)
+        };
+
+        if(!data.classes.length || !data.subs.length) return alert("Please fill Class and Subject data!");
+
+        const teachers = [...new Set(data.subs.flatMap(s => s.t))].sort();
+        const columns = (mode === 'class') ? data.classes.map(c => c.n) : teachers;
+
+        let html = `<thead><tr><th>Time / Slot</th>`;
+        columns.forEach(c => html += `<th>${c}</th>`);
+        html += `</tr></thead><tbody>`;
+
+        let time = new Date(`2000-01-01T${data.start}`);
+        let pActive = 1;
+
+        for (let i = 1; i <= data.periods + 1; i++) {
+            let sT = time.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+            
+            if (i === data.breakAfter + 1) {
+                let breakStart = sT;
+                time.setMinutes(time.getMinutes() + data.breakDur);
+                html += `<tr><td class="cell-break">BREAK<br><small>${breakStart}-${time.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</small></td>
+                         <td colspan="${columns.length}" class="cell-break">RECESS / BREAK</td></tr>`;
+                continue;
+            }
+
+            if (pActive > data.periods) break;
+
+            let dur = (pActive === 1) ? 50 : 40; 
+            time.setMinutes(time.getMinutes() + dur);
+            let eT = time.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+            
+            html += `<tr><td><strong>P${pActive}</strong><br><small>${sT}-${eT}</small></td>`;
+            
+            const usedInRow = new Set();
+            columns.forEach((col, idx) => {
+                let sName = "-", val = "-";
+                if(mode === 'class') {
+                    const cls = data.classes[idx];
+                    if(pActive === 1) {
+                        const subFound = data.subs.find(s => s.t.includes(cls.i));
+                        sName = subFound ? subFound.s : "Homeroom";
+                        val = cls.i;
+                    } else {
+                        const sub = data.subs[(idx + pActive) % data.subs.length];
+                        sName = sub.s;
+                        val = sub.t.find(t => !usedInRow.has(t)) || sub.t[0];
+                    }
+                    usedInRow.add(val);
+                    html += `<td><b>${sName}</b><br><small>${val}</small></td>`;
+                } else {
+                    // Teacher-wise logic
+                    const clsIdx = (idx + pActive) % data.classes.length;
+                    const targetCls = data.classes[clsIdx];
+                    const subFound = data.subs.find(s => s.t.includes(col));
+                    html += `<td><b>${subFound ? subFound.s : 'Free'}</b><br><small>${targetCls.n}</small></td>`;
+                }
+            });
+            html += `</tr>`;
+            pActive++;
+        }
+        document.getElementById('mainTimetable').innerHTML = html;
+        document.getElementById('outSchoolName').innerText = data.name;
+        document.getElementById('outType').innerText = mode === 'class' ? "Class-wise Timetable" : "Teacher-wise Timetable";
+        document.getElementById('outputWrapper').style.display = 'block';
+    }
+
+    function exportToExcel() {
+        const table = document.getElementById("mainTimetable");
+        const wb = XLSX.utils.table_to_book(table);
+        XLSX.writeFile(wb, "AFU_Master_Timetable.xlsx");
+    }
+
+    function exportToWord() {
+        const content = document.getElementById('outputWrapper').innerHTML;
+        const header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://w3.org'><head><meta charset='utf-8'><style>table{border-collapse:collapse; width:100%;} th,td{border:1px solid black; padding:5px; text-align:center; font-family:sans-serif;} .cell-break{background-color:#fef08a;}</style></head><body>";
+        const footer = "</body></html>";
+        const blob = new Blob(['\ufeff', header + content + footer], { type: 'application/msword' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'AFU_Master_Timetable.doc';
+        link.click();
+    }
+</script>
+</body>
+</html>

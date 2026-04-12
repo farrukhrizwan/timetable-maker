@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About | Farrukh Barlas - AFU WEBS</title>
+    <style>
+        :root {
+            --primary: #1e293b;
+            --accent: #3b82f6;
+            --text: #334155;
+            --bg: #f8fafc;
+        }
+
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
+            line-height: 1.7;
+            margin: 0; 
+            background: var(--bg); 
+            color: var(--text); 
+        }
+
+        header { 
+            background-color:#C6E6FB ; 
+            color: black; 
+            padding: 2rem 1rem; 
+            text-align: center;
+        }
+
+        .back-btn { 
+            display: inline-block;
+            margin-top: 12px;
+            color: black; 
+            text-decoration: none; 
+            font-size: 1rem;
+            border: 2px solid #475569; 
+            padding: 5px 15px; 
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover { background: blue; color: white; }
+
+        main { 
+            padding: 40px; 
+            max-width: 700px; 
+            margin: -30px auto 40px; 
+            background: white; 
+            border-radius: 16px;
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+        }
+
+        /* Profile Section */
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .profile-img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--accent);
+        }
+
+        .brand-logo {
+            height: 40px;
+            margin-bottom: 10px;
+			border-radius: 20px;
+        }
+
+        h1 { margin: 0; font-size: 1.8rem; letter-spacing: -0.5px; color: black; }
+        .subtitle { color: var(--accent); font-weight: 700; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px; }
+		.social-links { display: flex; gap: 1rem; align-items: center; }
+        .social-links a {
+            color: var(--text-muted); text-decoration: none; display: flex;
+            align-items: center; gap: 0.5rem; font-size: 0.9rem; font-weight: 500;
+            transition: color 0.2s; padding: 0.5rem; border-radius: var(--radius);
+        }
+		.social-links a:hover { color: blue; background: white; border-radius: 20px;transform: translateY(-2px) }
+        .social-links svg { width: 20px; height: 20px; fill: currentColor; }
+
+        .brand-box { 
+            background: #f1f5f9;
+            border-left: 4px solid var(--accent); 
+            padding: 25px; 
+            margin: 2rem 0; 
+            border-radius: 0 12px 12px 0;
+        }
+
+        .projects-link {
+            display: block;
+            text-align: center;
+            background: var(--primary);
+            color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .projects-link:hover { background: var(--accent); transform: translateY(-2px); }
+
+        footer { text-align: center; padding: 20px; font-size: 0.85rem; color: #64748b; }
+    </style>
+</head>
+<body>
+
+    <header>
+             <div class="social-links">
+            <a href="https://barlas.fr.eu.org" target="_blank"  rel="noopener noreferrer"  title="Blog">
+                <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM8 18H6v-2h2v2zm0-4H6v-2h2v2zm0-4H6V8h2v2zm8 8h-6v-2h6v2zm0-4h-6v-2h6v2zm0-4h-6V8h6v2z"/></svg>
+                <span>Blog</span>
+            </a>
+            <a href="https://www.afuwebs.dpdns.org/home" target="_blank"  rel="noopener noreferrer" title="AFU WEBS">
+                <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                <span>AFU WEBS</span>
+            </a>
+            <a href="https://www.facebook.com/farrukhbarlas.official" target="_blank"  rel="noopener noreferrer" title="Facebook">
+                <svg viewBox="0 0 24 24"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95z"/></svg>
+            </a>
+            <a href="https://x.com/Farrukh_barlas" target="_blank"  rel="noopener noreferrer" title="X (Twitter)">
+                <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            </a>
+            <a href="https://www.youtube.com/@tecknowdaily" target="_blank"  rel="noopener noreferrer" title="YouTube">
+                <svg viewBox="0 0 24 24"><path d="M21.58 7.19c-.23-.86-.91-1.54-1.77-1.77C18.25 5 12 5 12 5s-6.25 0-7.81.42c-.86.23-1.54.91-1.77 1.77C2 8.75 2 12 2 12s0 3.25.42 4.81c.23.86.91 1.54 1.77 1.77C5.75 19 12 19 12 19s6.25 0 7.81-.42c.86-.23 1.54-.91 1.77-1.77C22 15.25 22 12 22 12s0-3.25-.42-4.81zM10 15V9l5.2 3-5.2 3z"/></svg>
+            </a>
+        </div>
+        <h1>About the Developer</h1>
+        <a href="index" class="back-btn">← Back to App</a>
+    </header>
+
+    <main>
+        <div class="profile-header">
+            
+            <img src="icons/farrukhbarlas.jpeg" alt="Farrukh Barlas" class="profile-img">
+            <div>
+                <span class="subtitle">Developer & Data Analyst</span>
+                <h2>Farrukh Barlas</h2>
+            </div>
+        </div>
+
+        <p>I am dedicated to building the digital tools of tomorrow. My mission is to transform raw data into functional, beautiful experiences that solve real-world problems.</p>
+
+        <div class="brand-box">
+            
+            <img src="icons/icon-48x48.png" alt="AFU WEBS" class="brand-logo">
+            <p>Under my startup, <strong>AFU WEBS</strong>, I architect scalable web applications and high-performance apps like the <strong>Timetable Maker</strong>. We are a digital-first entity committed to technical excellence and user-centric design.</p>
+        </div>
+
+        <p>Beyond engineering, I am a lifelong learner and a blogger, sharing my process from deep data dives to the challenges of building a startup from the ground up, and much more.</p>
+
+        <a href="https://farrukhrizwan.qzz.io/projects.html" target="_blank" rel="noopener noreferrer" class="projects-link">
+            View My Projects & Apps →
+        </a>
+		<p> E Mail me: <strong>contact@barlas.fr.eu.org</strong> </p>
+    </main>
+
+    <footer>
+        &copy; <script>document.write(new Date().getFullYear())</script> <strong>Farrukh Barlas</strong> • AFU WEBS
+    </footer>
+
+</body>
+</html>
